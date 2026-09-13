@@ -1,0 +1,125 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-09-13 19:16:08.405706",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_thresholds",
+  "ghost_threshold_days",
+  "zombie_revisit_threshold",
+  "monologue_threshold_pct",
+  "column_break_thresholds",
+  "currency",
+  "working_hours_per_day",
+  "working_days_per_month",
+  "section_break_notifications",
+  "enable_email_alerts",
+  "manager_email",
+  "hr_email"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_thresholds",
+   "fieldtype": "Section Break",
+   "label": "Thresholds"
+  },
+  {
+   "default": "7",
+   "fieldname": "ghost_threshold_days",
+   "fieldtype": "Int",
+   "label": "Ghost Threshold (Days)",
+   "reqd": 1
+  },
+  {
+   "default": "2",
+   "fieldname": "zombie_revisit_threshold",
+   "fieldtype": "Int",
+   "label": "Zombie Revisit Threshold",
+   "reqd": 1
+  },
+  {
+   "default": "65",
+   "fieldname": "monologue_threshold_pct",
+   "fieldtype": "Int",
+   "label": "Monologue Threshold (%)",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_thresholds",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "INR",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "default": "8",
+   "fieldname": "working_hours_per_day",
+   "fieldtype": "Int",
+   "label": "Working Hours Per Day",
+   "reqd": 1
+  },
+  {
+   "default": "22",
+   "fieldname": "working_days_per_month",
+   "fieldtype": "Int",
+   "label": "Working Days Per Month",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_notifications",
+   "fieldtype": "Section Break",
+   "label": "Notifications"
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_email_alerts",
+   "fieldtype": "Check",
+   "label": "Enable Email Alerts"
+  },
+  {
+   "fieldname": "manager_email",
+   "fieldtype": "Data",
+   "label": "Manager Email"
+  },
+  {
+   "fieldname": "hr_email",
+   "fieldtype": "Data",
+   "label": "HR Email"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-09-13 19:50:00.000000",
+ "modified_by": "Administrator",
+ "module": "Meeting Intelligence",
+ "name": "Meeting Config",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
