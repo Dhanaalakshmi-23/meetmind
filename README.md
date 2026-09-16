@@ -2,6 +2,8 @@
 
 Frappe application that transforms raw meeting data into measurable business intelligence.
 
+![Meetmind Screen Shot](./Meetmind.png)
+
 ## Project Overview
 
 MeetMind is a meeting intelligence platform designed to capture meeting information and convert it into actionable business insights.
