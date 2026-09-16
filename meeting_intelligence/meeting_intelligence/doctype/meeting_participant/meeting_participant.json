@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "autoname": "PART-.YYYY.-.#####",
+ "creation": "2026-09-14 11:28:16.229738",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_basic",
+  "participant_name",
+  "participant_type",
+  "column_break_basic",
+  "email",
+  "phone",
+  "section_break_professional",
+  "designation",
+  "department",
+  "company",
+  "column_break_professional",
+  "annual_ctc",
+  "is_active",
+  "section_break_meeting_intelligence",
+  "default_talk_percentage",
+  "meeting_count",
+  "column_break_meeting_intelligence",
+  "total_meeting_cost",
+  "average_talk_percentage",
+  "section_break_notes",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_basic",
+   "fieldtype": "Section Break",
+   "label": "Basic Information"
+  },
+  {
+   "fieldname": "participant_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Participant Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "participant_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Participant Type",
+   "options": "Internal\nClient\nConsultant\nExternal",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_basic",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "section_break_professional",
+   "fieldtype": "Section Break",
+   "label": "Professional Information"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Data",
+   "label": "Designation"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Data",
+   "label": "Department"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "Company"
+  },
+  {
+   "fieldname": "column_break_professional",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "annual_ctc",
+   "fieldtype": "Currency",
+   "label": "Annual CTC"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Is Active"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_meeting_intelligence",
+   "fieldtype": "Section Break",
+   "label": "Meeting Intelligence"
+  },
+  {
+   "default": "0",
+   "fieldname": "default_talk_percentage",
+   "fieldtype": "Percent",
+   "label": "Default Talk Percentage",
+   "non_negative": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "meeting_count",
+   "fieldtype": "Int",
+   "label": "Meeting Count",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_meeting_intelligence",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_meeting_cost",
+   "fieldtype": "Currency",
+   "label": "Total Meeting Cost",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "average_talk_percentage",
+   "fieldtype": "Percent",
+   "label": "Average Talk Percentage",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-14 12:45:02.000000",
+ "modified_by": "Administrator",
+ "module": "Meeting Intelligence",
+ "name": "Meeting Participant",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Manager",
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "search_fields": "participant_type,email",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "participant_name"
+}

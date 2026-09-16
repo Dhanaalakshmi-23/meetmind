@@ -11,7 +11,7 @@ The application focuses on:
 * Meeting effectiveness
 * Decision tracking
 * Action-item tracking
-* Employee accountability
+* Participant accountability
 * Ghost action-item detection
 * Zombie decision detection
 * Meeting health analysis
@@ -19,7 +19,7 @@ The application focuses on:
 
 ## Current Scope
 
-The initial version contains six core DocTypes.
+The initial version contains seven core DocTypes.
 
 | DocType                  | Purpose                            | Type             |
 | ------------------------ | ---------------------------------- | ---------------- |
@@ -28,7 +28,8 @@ The initial version contains six core DocTypes.
 | **Decision Log**         | Decisions made during meetings     | Submittable      |
 | **Action Item**          | Tasks assigned during meetings     | Submittable      |
 | **Meeting Config**       | Global application configuration   | Single           |
-| **Employee Ghost Score** | Employee-level action-item metrics | System Generated |
+| **Meeting Participant**  | Master record of meeting people    | Master           |
+| **Employee Ghost Score** | Participant action-item metrics    | System Generated |
 
 ## Core DocTypes
 
@@ -63,8 +64,8 @@ Child table attached to Meeting Session.
 
 It stores participant-level information such as:
 
-* Employee
-* Employee name
+* Participant
+* Participant name
 * Designation
 * Talk percentage
 * Annual CTC
@@ -138,7 +139,7 @@ This is a **Single DocType** and does not use naming series or document submissi
 
 ### 6. Employee Ghost Score
 
-System-generated document containing employee-level action-item performance metrics.
+System-generated document containing participant-level action-item performance metrics.
 
 It tracks:
 
@@ -153,11 +154,28 @@ It tracks:
 
 This document will be maintained by application logic and scheduled processing.
 
+### 7. Meeting Participant
+
+Master record of people who attend meetings.
+
+It stores:
+
+* Participant name and type
+* Email and phone
+* Designation, department, and company
+* Annual CTC
+* Active status
+* Default talk percentage
+* Aggregated meeting statistics
+
+Naming series:
+
+`PART-.YYYY.-.#####`
+
 ## External DocType Dependencies
 
 MeetMind references existing Frappe/other application DocTypes:
 
-* Employee
 * Department
 * Currency
 
@@ -197,7 +215,7 @@ Action items that remain incomplete beyond the configured threshold will be iden
 
 ### Employee Ghost Score
 
-Employee-level ghost-action metrics will be aggregated to identify completion performance and risk levels.
+Participant-level ghost-action metrics will be aggregated to identify completion performance and risk levels.
 
 ## Development Status
 
@@ -211,6 +229,7 @@ Employee-level ghost-action metrics will be aggregated to identify completion pe
 * Decision Log DocType
 * Action Item DocType
 * Meeting Config Single DocType
+* Meeting Participant DocType
 * Employee Ghost Score DocType
 * Required field definitions
 * External DocType links
@@ -225,13 +244,11 @@ Employee-level ghost-action metrics will be aggregated to identify completion pe
 * Monologue detection
 * Zombie decision detection
 * Ghost action detection
-* Employee ghost-score calculation
+* Participant ghost-score calculation
 * Scheduled processing
 * Email notifications
 * Reports
 * Dashboards
-* Analytics
-* AI/ML capabilities
 
 ## Technology
 
@@ -252,6 +269,7 @@ meeting_intelligence/
 │   │   ├── decision_log/
 │   │   ├── action_item/
 │   │   ├── meeting_config/
+│   │   ├── meeting_participant/
 │   │   └── employee_ghost_score/
 │   └── module_def/
 │
@@ -275,11 +293,10 @@ Action Tracking
      ↓
 Ghost / Zombie Detection
      ↓
-Employee & Meeting Metrics
+Participant & Meeting Metrics
      ↓
 Reports & Dashboards
-     ↓
-AI / ML Insights
+     
 ```
 
 ## License

@@ -29,6 +29,7 @@
    "default": "7",
    "fieldname": "ghost_threshold_days",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Ghost Threshold (Days)",
    "reqd": 1
   },
@@ -36,6 +37,7 @@
    "default": "2",
    "fieldname": "zombie_revisit_threshold",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Zombie Revisit Threshold",
    "reqd": 1
   },
@@ -43,6 +45,7 @@
    "default": "65",
    "fieldname": "monologue_threshold_pct",
    "fieldtype": "Int",
+   "in_list_view": 1,
    "label": "Monologue Threshold (%)",
    "reqd": 1
   },
@@ -54,6 +57,7 @@
    "default": "INR",
    "fieldname": "currency",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Currency",
    "options": "Currency",
    "reqd": 1
@@ -86,19 +90,21 @@
   {
    "fieldname": "manager_email",
    "fieldtype": "Data",
-   "label": "Manager Email"
+   "label": "Manager Email",
+   "options": "Email"
   },
   {
    "fieldname": "hr_email",
    "fieldtype": "Data",
-   "label": "HR Email"
+   "label": "HR Email",
+   "options": "Email"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-09-13 19:50:00.000000",
+ "modified": "2026-09-16 11:39:46.888892",
  "modified_by": "Administrator",
  "module": "Meeting Intelligence",
  "name": "Meeting Config",
@@ -108,12 +114,18 @@
    "create": 1,
    "delete": 1,
    "email": 1,
-   "export": 1,
    "print": 1,
    "read": 1,
-   "report": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "MeetMind Admin",
    "write": 1
   }
  ],

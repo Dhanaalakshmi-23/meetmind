@@ -41,19 +41,22 @@
   {
    "fieldname": "meeting_title",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Meeting Title",
    "reqd": 1
   },
   {
    "fieldname": "meeting_type",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Meeting Type",
    "options": "Planning\nReview\nStandup\nStrategy\nCrisis\nRetrospective",
    "reqd": 1
   },
   {
    "fieldname": "department",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Department",
    "options": "Department",
    "reqd": 1
@@ -66,6 +69,7 @@
    "default": "Today",
    "fieldname": "meeting_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Meeting Date",
    "reqd": 1
   },
@@ -180,7 +184,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-13 19:50:00.000000",
+ "modified": "2026-09-14 12:45:00.000000",
  "modified_by": "Administrator",
  "module": "Meeting Intelligence",
  "name": "Meeting Session",
@@ -196,6 +200,37 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "export": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind User",
    "write": 1
   }
  ],

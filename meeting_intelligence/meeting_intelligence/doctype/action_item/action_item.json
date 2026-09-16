@@ -54,14 +54,14 @@
    "fieldname": "assigned_to",
    "fieldtype": "Link",
    "label": "Assigned To",
-   "options": "Employee",
+   "options": "Meeting Participant",
    "reqd": 1
   },
   {
    "fieldname": "assigned_by",
    "fieldtype": "Link",
    "label": "Assigned By",
-   "options": "Employee"
+   "options": "Meeting Participant"
   },
   {
    "fieldname": "due_date",
@@ -150,7 +150,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-13 19:50:00.000000",
+ "modified": "2026-09-14 12:45:05.000000",
  "modified_by": "Administrator",
  "module": "Meeting Intelligence",
  "name": "Action Item",
@@ -169,6 +169,40 @@
    "role": "System Manager",
    "share": 1,
    "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Admin",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Manager",
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind User",
    "write": 1
   }
  ],

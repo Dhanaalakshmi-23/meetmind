@@ -6,8 +6,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_employee",
-  "employee",
+  "section_break_participant",
+  "participant",
   "section_break_stats",
   "total_assigned",
   "total_completed",
@@ -21,15 +21,15 @@
  ],
  "fields": [
   {
-   "fieldname": "section_break_employee",
+   "fieldname": "section_break_participant",
    "fieldtype": "Section Break",
-   "label": "Employee"
+   "label": "Participant"
   },
   {
-   "fieldname": "employee",
+   "fieldname": "participant",
    "fieldtype": "Link",
-   "label": "Employee",
-   "options": "Employee",
+   "label": "Participant",
+   "options": "Meeting Participant",
    "reqd": 1,
    "unique": 1
   },
@@ -95,14 +95,14 @@
    "fieldname": "risk_level",
    "fieldtype": "Select",
    "label": "Risk Level",
-   "options": "High\nMedium\nLow",
+   "options": "Low\nMedium\nHigh\nCritical",
    "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-13 19:50:00.000000",
+ "modified": "2026-09-14 12:45:03.000000",
  "modified_by": "Administrator",
  "module": "Meeting Intelligence",
  "name": "Employee Ghost Score",
@@ -119,6 +119,28 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Admin",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind Manager"
+  },
+  {
+   "read": 1,
+   "report": 1,
+   "role": "MeetMind User"
   }
  ],
  "row_format": "Dynamic",
