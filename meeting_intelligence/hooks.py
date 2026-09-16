@@ -31,3 +31,16 @@ scheduler_events = {
 		"meeting_intelligence.tasks.send_manager_digest",
 	],
 }
+fixtures = [
+    {
+        "dt": "Email Template",
+        "filters": [
+            ["name", "in", [
+                "Ghost Score Alert",
+                "MeetMind Weekly Digest",
+                "Overdue Action Items",
+                "Zombie Decision Alert"
+            ]]
+        ]
+    }
+]
