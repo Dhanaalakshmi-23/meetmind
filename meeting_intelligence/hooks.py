@@ -5,14 +5,6 @@ app_description = "Frappe application that transforms raw meeting data into meas
 app_email = "dhanaalakshminarayanan@gmail.com"
 app_license = "mit"
 
-# Installation
-# ------------
-
-after_install = "meeting_intelligence.setup.after_install"
-
-# Document Events
-# ---------------
-
 doc_events = {
 	"Meeting Session": {
 		"on_update": "meeting_intelligence.meeting_intelligence.doctype.meeting_participant.meeting_participant.update_metrics_on_session_change",
@@ -27,9 +19,6 @@ doc_events = {
 		"on_trash": "meeting_intelligence.meeting_intelligence.doctype.action_item.action_item.update_session_action_count_on_trash",
 	},
 }
-
-# Scheduled Tasks
-# ---------------
 
 scheduler_events = {
 	"daily": [
