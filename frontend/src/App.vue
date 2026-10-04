@@ -1,9 +1,60 @@
 <script setup>
-import { computed, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import { getActiveParticipants, getMeetingFormOptions, createMeetingSession, initSession } from './api.js'
 
-const meetingTypes = ['Planning', 'Review', 'Standup', 'Strategy', 'Crisis', 'Retrospective']
-const agendaFollowedOptions = ['Yes', 'Partially', 'No']
-const participantOptions = ['Raj S', 'Arun Kumar', 'Priya', 'Karthik']
+// Meeting Types — sourced from the centralized Meeting Type DocType
+const meetingTypes = ref([])           // [{ name, meeting_type_name }]
+const typesLoading = ref(false)
+const typesError = ref('')
+
+// Agenda options — sourced from Meeting Session DocType metadata via the backend
+const agendaFollowedOptions = ref([])
+const optionsLoading = ref(false)
+const optionsError = ref('')
+
+// Participants — fetched from Meeting Participant DocType on mount
+const participantOptions = ref([])     // [{ name, participant_name, designation, department }]
+const participantsLoading = ref(false)
+const participantsError = ref('')
+
+onMounted(async () => {
+  await initSession()
+  loadFormOptions()
+  loadParticipants()
+})
+
+async function loadFormOptions() {
+  optionsLoading.value = true
+  optionsError.value = ''
+  typesLoading.value = true
+  typesError.value = ''
+  try {
+    // get_meeting_form_options() returns both the active Meeting Type records
+    // and the Meeting Session agenda_followed options in a single call.
+    const options = (await getMeetingFormOptions()) || {}
+    meetingTypes.value = options.meeting_types || []
+    agendaFollowedOptions.value = options.agenda_followed_options || []
+  } catch (err) {
+    const message = err.message || 'Could not load meeting options. Please refresh.'
+    optionsError.value = message
+    typesError.value = message
+  } finally {
+    optionsLoading.value = false
+    typesLoading.value = false
+  }
+}
+
+async function loadParticipants() {
+  participantsLoading.value = true
+  participantsError.value = ''
+  try {
+    participantOptions.value = (await getActiveParticipants()) || []
+  } catch (err) {
+    participantsError.value = err.message || 'Could not load participants. Please refresh.'
+  } finally {
+    participantsLoading.value = false
+  }
+}
 
 const wizardSteps = [
   { label: 'Meeting', title: 'Meeting Details' },
@@ -152,7 +203,12 @@ function goPrevious() {
   goToStep(currentStep.value - 1)
 }
 
-function handleSubmit() {
+// Submit state
+const submitting = ref(false)
+const submitError = ref('')
+const submitResult = ref(null)  // holds { name, health_score, health_label, meeting_cost } on success
+
+async function handleSubmit() {
   validated.value = validateForm()
 
   if (!validated.value) {
@@ -170,6 +226,36 @@ function handleSubmit() {
     } else {
       goToStep(3)
     }
+    return
+  }
+
+  submitting.value = true
+  submitError.value = ''
+  submitResult.value = null
+
+  try {
+    const payload = {
+      meeting_title: form.meetingTitle,
+      meeting_type: form.meetingType,
+      department: form.department,
+      meeting_date: form.meetingDate,
+      duration_minutes: form.durationMinutes,
+      agenda_followed: form.agendaFollowed,
+      agenda: form.agenda,
+      notes: form.notes,
+      attendees: attendees.value.map((a) => ({
+        participant: a.participant,
+        talk_percentage: a.talk_percentage,
+        attended: a.attended,
+      })),
+    }
+
+    const result = await createMeetingSession(payload)
+    submitResult.value = result
+  } catch (err) {
+    submitError.value = err.message || 'Submission failed. Please try again.'
+  } finally {
+    submitting.value = false
   }
 }
 </script>
@@ -249,13 +335,25 @@ function handleSubmit() {
                 <select
                   id="meeting-type"
                   v-model="form.meetingType"
+                  :disabled="typesLoading"
                   :class="{ invalid: errors.meetingType }"
                   @change="clearError('meetingType')"
                 >
-                  <option value="" disabled>Select meeting type</option>
-                  <option v-for="type in meetingTypes" :key="type" :value="type">{{ type }}</option>
+                  <option value="" disabled>
+                    {{ typesLoading ? 'Loading meeting types…' : 'Select meeting type' }}
+                  </option>
+                  <option v-for="type in meetingTypes" :key="type.name" :value="type.name">
+                    {{ type.meeting_type_name }}
+                  </option>
                 </select>
                 <p v-if="errors.meetingType" class="error-text">{{ errors.meetingType }}</p>
+                <p v-if="typesError" class="error-text">{{ typesError }}</p>
+                <p
+                  v-if="!typesLoading && !typesError && meetingTypes.length === 0"
+                  class="error-text"
+                >
+                  No active meeting types found. Add them in MeetMind before capturing meetings.
+                </p>
               </div>
 
               <div class="field">
@@ -326,11 +424,19 @@ function handleSubmit() {
                 <select
                   :id="`participant-${index}`"
                   v-model="attendee.participant"
+                  :disabled="participantsLoading"
                   @change="clearAttendeesErrors"
                 >
-                  <option value="" disabled>Select participant</option>
-                  <option v-for="option in participantOptions" :key="option" :value="option">
-                    {{ option }}
+                  <option value="" disabled>
+                    {{ participantsLoading ? 'Loading participants…' : 'Select participant' }}
+                  </option>
+                  <option
+                    v-for="option in participantOptions"
+                    :key="option.name"
+                    :value="option.name"
+                  >
+                    {{ option.participant_name }}
+                    <template v-if="option.designation"> — {{ option.designation }}</template>
                   </option>
                 </select>
               </div>
@@ -368,6 +474,17 @@ function handleSubmit() {
 
             <button type="button" class="add-btn" @click="addAttendee">+ Add Attendee</button>
 
+            <!-- Participants fetch error -->
+            <p v-if="participantsError" class="error-text attendee-error">{{ participantsError }}</p>
+
+            <!-- Participants empty state -->
+            <p
+              v-if="!participantsLoading && !participantsError && participantOptions.length === 0"
+              class="error-text attendee-error"
+            >
+              No active participants found. Add participants in MeetMind before capturing meetings.
+            </p>
+
             <p
               v-for="(message, index) in attendeesErrors"
               :key="index"
@@ -388,10 +505,13 @@ function handleSubmit() {
               <select
                 id="agenda-followed"
                 v-model="form.agendaFollowed"
+                :disabled="optionsLoading"
                 :class="{ invalid: errors.agendaFollowed }"
                 @change="clearError('agendaFollowed')"
               >
-                <option value="" disabled>Select an option</option>
+                <option value="" disabled>
+                  {{ optionsLoading ? 'Loading options…' : 'Select an option' }}
+                </option>
                 <option v-for="option in agendaFollowedOptions" :key="option" :value="option">
                   {{ option }}
                 </option>
@@ -440,21 +560,49 @@ function handleSubmit() {
           >
             {{ currentStep === 1 ? 'Continue to Attendees →' : 'Continue to Meeting Context →' }}
           </button>
-          <button v-else type="submit" class="continue-btn">Submit Meeting</button>
+          <button
+            v-else
+            type="submit"
+            class="continue-btn"
+            :disabled="submitting"
+          >
+            {{ submitting ? 'Saving…' : 'Submit Meeting' }}
+          </button>
         </div>
 
-        <div v-if="validated" class="success-banner" role="status">
+        <!-- API submit error -->
+        <div v-if="submitError" class="error-banner" role="alert">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <circle cx="8" cy="8" r="7" fill="#188038" />
-            <path
-              d="M4.8 8.2L7 10.4L11.2 5.8"
-              stroke="#ffffff"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <circle cx="8" cy="8" r="7" fill="#d93025" />
+            <path d="M8 4.5V8.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" />
+            <circle cx="8" cy="11" r="0.8" fill="#fff" />
           </svg>
-          <span>All required fields are valid. API submission will be connected later.</span>
+          <span>{{ submitError }}</span>
+        </div>
+
+        <!-- Success card after create -->
+        <div v-if="submitResult" class="success-card" role="status">
+          <div class="success-card-header">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+              <circle cx="9" cy="9" r="8" fill="#188038" />
+              <path d="M5.4 9.2L7.9 11.7L12.6 6.3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Meeting saved — {{ submitResult.name }}</span>
+          </div>
+          <div class="success-metrics">
+            <div class="metric-chip">
+              <span class="metric-label">Health</span>
+              <span class="metric-value">{{ submitResult.health_label }} ({{ submitResult.health_score }}/100)</span>
+            </div>
+            <div class="metric-chip">
+              <span class="metric-label">Meeting Cost</span>
+              <span class="metric-value">{{ submitResult.meeting_cost.toFixed(2) }}</span>
+            </div>
+            <div class="metric-chip">
+              <span class="metric-label">Status</span>
+              <span class="metric-value">{{ submitResult.status }}</span>
+            </div>
+          </div>
         </div>
       </form>
     </div>
@@ -874,6 +1022,81 @@ select {
   flex-shrink: 0;
 }
 
+/* API submit error */
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--error);
+  background: #fdecea;
+  border: 1px solid #f5c6c3;
+  border-radius: 10px;
+  margin-top: 14px;
+  animation: fade-slide 0.2s ease;
+}
+
+.error-banner svg {
+  flex-shrink: 0;
+}
+
+/* Success card with computed metrics */
+.success-card {
+  margin-top: 16px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #e6f4ea 0%, #f0fbf2 100%);
+  border: 1px solid #a8d5b5;
+  border-radius: 14px;
+  animation: fade-slide 0.25s ease;
+}
+
+.success-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--success);
+  margin-bottom: 14px;
+}
+
+.success-card-header svg {
+  flex-shrink: 0;
+}
+
+.success-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.metric-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #c3e6cb;
+  border-radius: 10px;
+  min-width: 120px;
+}
+
+.metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .attendee-row {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto auto;
@@ -1002,6 +1225,17 @@ select {
 
 .back-btn:active {
   transform: translateY(1px);
+}
+
+/* Session notice */
+.auth-card {
+  animation: rise 0.35s ease both;
+}
+
+.auth-message {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 @media (max-width: 720px) {

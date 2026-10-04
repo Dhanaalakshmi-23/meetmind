@@ -10,7 +10,7 @@ CLOSED_DECISION_STATUSES = ("Completed", "Cancelled", "Abandoned")
 
 
 def get_config():
-    values = frappe.get_singles_dict("Meeting Config")
+    values = frappe.db.get_singles_dict("Meeting Config")
 
     return {
         "ghost_threshold_days": cint(values.get("ghost_threshold_days")) or 7,

@@ -9,7 +9,6 @@ class MeetingAttendee(Document):
 
     def validate(self):
         self.validate_talk_percentage()
-        self.validate_rates()
 
     def validate_talk_percentage(self):
         talk_percentage = flt(self.talk_percentage)

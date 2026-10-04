@@ -46,13 +46,12 @@
    "reqd": 1
   },
   {
-   "fieldname": "meeting_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Meeting Type",
-   "options": "Planning\nReview\nStandup\nStrategy\nCrisis\nRetrospective",
-   "reqd": 1
-  },
+  "fieldname": "meeting_type",
+  "fieldtype": "Link",
+  "label": "Meeting Type",
+  "options": "Meeting Type",
+  "reqd": 1
+},
   {
    "fieldname": "department",
    "fieldtype": "Data",

@@ -79,7 +79,7 @@ class ActionItem(Document):
 
 
 def get_ghost_flag(days_overdue):
-    values = frappe.get_singles_dict("Meeting Config")
+    values = frappe.db.get_singles_dict("Meeting Config")
     threshold = cint(values.get("ghost_threshold_days")) or 7
 
     return 1 if days_overdue > threshold else 0
